@@ -117,7 +117,7 @@
 	   preg_match("/\[(.*)\]/", $comment, $result);
 	   preg_match("/(.*)\|(.*)\|(.*)/", $result['1'], $splitresult);
 	   if(is_file('wp-content/uploads/comments/'.$splitresult['1'].'/'.$splitresult['2'].'/'.$splitresult['3'].'.jpg')){
-	      $image = '<br/><img src="'.get_option('siteurl').'wp-content/uploads/comments/'.$splitresult['1'].'/'.$splitresult['2'].'/'.$splitresult['3'].'.jpg" />';
+	      $image = '<br/><img src="'.get_option('siteurl').'/wp-content/uploads/comments/'.$splitresult['1'].'/'.$splitresult['2'].'/'.$splitresult['3'].'.jpg" />';
         $comment = str_replace($result['0'], $image,$comment);
         echo $comment;
 	   }
