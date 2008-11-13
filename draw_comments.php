@@ -2,7 +2,7 @@
   /*
     Plugin Name: Draw Comments
     Description: This plugin allows your visitors to draw an image as extra comment.
-    Version: 0.0.1
+    Version: 0.0.2
     Author: Andreas Zettl
     Author URI: http://azettl.de/
     Min WP Version: 2.6.2
@@ -96,9 +96,9 @@
         imagefilledrectangle ($im, $changedpos2, $changedpos1, ($changedpos2+4), ($changedpos1+4), $imgcolor);
       }
     }
-    @mkdir('wp-content/uploads/comments/');
-    @mkdir('wp-content/uploads/comments/'.date('Y'));
-    @mkdir('wp-content/uploads/comments/'.date('Y').'/'.date('m'));
+    @mkdir('wp-content/uploads/comments/', 0755);
+    @mkdir('wp-content/uploads/comments/'.date('Y'), 0755);
+    @mkdir('wp-content/uploads/comments/'.date('Y').'/'.date('m'), 0755);
     $image = 'wp-content/uploads/comments/'.date('Y').'/'.date('m').'/'.md5(uniqid(rand(), true)).'.jpg';
     ImagePNG ($im, $image);
     return $image;
@@ -117,7 +117,7 @@
 	   preg_match("/\[(.*)\]/", $comment, $result);
 	   preg_match("/(.*)\|(.*)\|(.*)/", $result['1'], $splitresult);
 	   if(is_file('wp-content/uploads/comments/'.$splitresult['1'].'/'.$splitresult['2'].'/'.$splitresult['3'].'.jpg')){
-	      $image = '<br/><img src="wp-content/uploads/comments/'.$splitresult['1'].'/'.$splitresult['2'].'/'.$splitresult['3'].'.jpg" />';
+	      $image = '<br/><img src="'.get_option('siteurl').'wp-content/uploads/comments/'.$splitresult['1'].'/'.$splitresult['2'].'/'.$splitresult['3'].'.jpg" />';
         $comment = str_replace($result['0'], $image,$comment);
         echo $comment;
 	   }
