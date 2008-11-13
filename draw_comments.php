@@ -3,7 +3,7 @@
     Plugin Name: Draw Comments
     Plugin URI: http://www.azettl.de/2008/11/draw-comments/
     Description: This plugin allows your visitors to draw an image as extra comment.
-    Version: 0.0.2
+    Version: 0.0.3
     Author: Andreas Zettl
     Author URI: http://azettl.de/
     Min WP Version: 2.6.2
@@ -68,6 +68,7 @@
     $color_000000 = ImageColorAllocate ($im, 0, 0, 0);
     $color_FFFFFF = ImageColorAllocate ($im, 255, 255, 255);
     
+    $drawn = 0;
     foreach($_POST as $pos => $color){
       if(!eregi('cell-', $pos)) continue;
       $position = explode("-", $pos);
@@ -77,18 +78,23 @@
         switch($color){
           case '#FF0000':
             $imgcolor = $color_FF0000;
+            $drawn = 1;
           	break;
           case '#0000FF':
             $imgcolor = $color_0000FF;
+            $drawn = 1;
           	break;
           case '#FFFF00':
             $imgcolor = $color_FFFF00;
+            $drawn = 1;
           	break;
           case '#00FF00':
             $imgcolor = $color_00FF00;
+            $drawn = 1;
           	break;
           case '#000000':
             $imgcolor = $color_000000;
+            $drawn = 1;
           	break;
           case '#FFFFFF':
             $imgcolor = $color_FFFFFF;
@@ -97,6 +103,9 @@
         imagefilledrectangle ($im, $changedpos2, $changedpos1, ($changedpos2+4), ($changedpos1+4), $imgcolor);
       }
     }
+    
+    if($drawn == 0) return false;
+    
     @mkdir('wp-content/uploads/comments/', 0755);
     @mkdir('wp-content/uploads/comments/'.date('Y'), 0755);
     @mkdir('wp-content/uploads/comments/'.date('Y').'/'.date('m'), 0755);
@@ -110,7 +119,9 @@
 	}
 	
 	function add_image($comment){
-	  $comment['comment_content'] .= '['.date('Y').'|'.date('m').'|'.str_replace('.jpg','', basename(createImage())).']';
+	  $image = createImage();
+	  if($image === false) return $comment;
+	  $comment['comment_content'] .= '['.date('Y').'|'.date('m').'|'.str_replace('.jpg','', basename($image)).']';
     return $comment;
 	}
 	
@@ -118,9 +129,11 @@
 	   preg_match("/\[(.*)\]/", $comment, $result);
 	   preg_match("/(.*)\|(.*)\|(.*)/", $result['1'], $splitresult);
 	   if(is_file('wp-content/uploads/comments/'.$splitresult['1'].'/'.$splitresult['2'].'/'.$splitresult['3'].'.jpg')){
-	      $image = '<br/><img src="'.get_option('siteurl').'/wp-content/uploads/comments/'.$splitresult['1'].'/'.$splitresult['2'].'/'.$splitresult['3'].'.jpg" />';
-        $comment = str_replace($result['0'], $image,$comment);
-        echo $comment;
+      $image = '<br/><img src="'.get_option('siteurl').'/wp-content/uploads/comments/'.$splitresult['1'].'/'.$splitresult['2'].'/'.$splitresult['3'].'.jpg" />';
+      $comment = str_replace($result['0'], $image,$comment);
+      echo $comment;
+	   }else{
+      echo $comment;
 	   }
 	}
 ?>
