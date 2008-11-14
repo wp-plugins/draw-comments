@@ -3,7 +3,7 @@
     Plugin Name: Draw Comments
     Plugin URI: http://www.azettl.de/2008/11/draw-comments/
     Description: This plugin allows your visitors to draw an image as extra comment.
-    Version: 0.0.4
+    Version: 0.0.5
     Author: Andreas Zettl
     Author URI: http://azettl.de/
     Min WP Version: 2.6.2
@@ -53,11 +53,11 @@
       $ret .= '<tr>';
       for($j = 0; $j < $cols; $j++){
         if(!empty($_POST['cell-'.$i.'-'.$j.''])){
-          $ret .= '<td style="width:8px;height:8px;line-height:8px;padding:0px;margin:0px;border:1px solid grey;" bgcolor="'.$_POST['cell-'.$i.'-'.$j.''].'" onmouseover="if(document.getElementById(\'draw_state\').value == 1){ this.bgColor=document.getElementById(\'draw_color\').value; document.getElementById(\'cell-'.$i.'-'.$j.'\').value = document.getElementById(\'draw_color\').value }">';
+          $ret .= '<td style="width:8px;height:8px;line-height:8px;padding:0px;margin:0px;border:1px solid #808080;" bgcolor="'.$_POST['cell-'.$i.'-'.$j.''].'" onmouseover="if(document.getElementById(\'draw_state\').value == 1){ this.bgColor=document.getElementById(\'draw_color\').value; document.getElementById(\'cell-'.$i.'-'.$j.'\').value = document.getElementById(\'draw_color\').value }">';
           $ret .= '<input type="hidden" name="cell-'.$i.'-'.$j.'" id="cell-'.$i.'-'.$j.'" value="'.$_POST['cell-'.$i.'-'.$j.''].'"/>';
           $ret .= '</td>';
         }else{
-          $ret .= '<td style="width:8px;height:8px;line-height:8px;padding:0px;margin:0px;border:1px solid grey;" onmouseover="if(document.getElementById(\'draw_state\').value == 1){ this.bgColor=document.getElementById(\'draw_color\').value; document.getElementById(\'cell-'.$i.'-'.$j.'\').value = document.getElementById(\'draw_color\').value }">';
+          $ret .= '<td style="width:8px;height:8px;line-height:8px;padding:0px;margin:0px;border:1px solid #808080;" onmouseover="if(document.getElementById(\'draw_state\').value == 1){ this.bgColor=document.getElementById(\'draw_color\').value; document.getElementById(\'cell-'.$i.'-'.$j.'\').value = document.getElementById(\'draw_color\').value }">';
           $ret .= '<input type="hidden" name="cell-'.$i.'-'.$j.'" id="cell-'.$i.'-'.$j.'" />';
           $ret .= '</td>';
         }
@@ -72,12 +72,12 @@
     $ret = '<table cellpadding="4" cellspacing="4">';
     $ret .= '<tr>';
     $ret .= '<td>Choose Color: </td>';
-    $ret .= '<td style="height:20px;width:20px;background-color:#FF0000;border:2px solid grey;" onclick="document.getElementById(\'draw_color\').value=\'#FF0000\';">&nbsp;</td>';
-    $ret .= '<td style="height:20px;width:20px;background-color:#0000FF;border:2px solid grey;" onclick="document.getElementById(\'draw_color\').value=\'#0000FF\';">&nbsp;</td>';
-    $ret .= '<td style="height:20px;width:20px;background-color:#FFFF00;border:2px solid grey;" onclick="document.getElementById(\'draw_color\').value=\'#FFFF00\';">&nbsp;</td>';
-    $ret .= '<td style="height:20px;width:20px;background-color:#00FF00;border:2px solid grey;" onclick="document.getElementById(\'draw_color\').value=\'#00FF00\';">&nbsp;</td>';
-    $ret .= '<td style="height:20px;width:20px;background-color:#000000;border:2px solid grey;" onclick="document.getElementById(\'draw_color\').value=\'#000000\';">&nbsp;</td>';
-    $ret .= '<td style="height:20px;width:20px;background-color:#FFFFFF;border:2px solid grey;" onclick="document.getElementById(\'draw_color\').value=\'#FFFFFF\';">&nbsp;</td>';
+    $ret .= '<td style="height:20px;width:20px;background-color:#FF0000;border:2px solid #808080;" onclick="document.getElementById(\'draw_color\').value=\'#FF0000\';">&nbsp;</td>';
+    $ret .= '<td style="height:20px;width:20px;background-color:#0000FF;border:2px solid #808080;" onclick="document.getElementById(\'draw_color\').value=\'#0000FF\';">&nbsp;</td>';
+    $ret .= '<td style="height:20px;width:20px;background-color:#FFFF00;border:2px solid #808080;" onclick="document.getElementById(\'draw_color\').value=\'#FFFF00\';">&nbsp;</td>';
+    $ret .= '<td style="height:20px;width:20px;background-color:#00FF00;border:2px solid #808080;" onclick="document.getElementById(\'draw_color\').value=\'#00FF00\';">&nbsp;</td>';
+    $ret .= '<td style="height:20px;width:20px;background-color:#000000;border:2px solid #808080;" onclick="document.getElementById(\'draw_color\').value=\'#000000\';">&nbsp;</td>';
+    $ret .= '<td style="height:20px;width:20px;background-color:#FFFFFF;border:2px solid #808080;" onclick="document.getElementById(\'draw_color\').value=\'#FFFFFF\';">&nbsp;</td>';
     $ret .= '</tr>';
     $ret .= '</table>';
     return $ret;
