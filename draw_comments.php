@@ -3,17 +3,45 @@
     Plugin Name: Draw Comments
     Plugin URI: http://www.azettl.de/2008/11/draw-comments/
     Description: This plugin allows your visitors to draw an image as extra comment.
-    Version: 0.0.3
+    Version: 0.0.4
     Author: Andreas Zettl
     Author URI: http://azettl.de/
     Min WP Version: 2.6.2
     Max WP Version: 2.6.3
   */
   
+  add_action('admin_menu', 'draw_add_menu');
 	add_action('comment_form', 'comment_form');
   add_action('preprocess_comment', 'add_image',1);
   add_filter('comment_text', 'replace_image');
+
+  $draw_do_action = get_option('draw_do_action');
+  if ('insert' == $HTTP_POST_VARS['action']){
+    update_option("draw_do_action",$HTTP_POST_VARS['draw_do_action']);
+  }
   
+  function draw_option_page() {
+    echo '<div class="wrap">
+            <h2>Draw Comments</h2>
+            <form name="form1" method="post" action="'.$location.'">
+              <label for="draw_do_action">Use "do_action(\'comment_form\', $post->ID);" to embed the drawing area:</label><br />
+              <select name="draw_do_action">
+                <option value="1" '.((get_option("draw_do_action") == '1') ? 'selected="selected"' : '').'>Yes</option>
+                <option value="-1" '.((get_option("draw_do_action") == '-1') ? 'selected="selected"' : '').'>No</option>
+              </select>
+              <p>(If "No" selected, you have to use "echo getDrawArea().getColors();" instead of do_action)</p>
+              <br /><br />
+              <input type="submit" value="Save" />
+              <input name="action" value="insert" type="hidden" />
+            </form>
+          </div>';
+  }
+  
+  function draw_add_menu() {
+    add_option("draw_do_action","");
+    add_options_page('Draw Comments', 'Draw Comments', 9, __FILE__, 'draw_option_page');
+  }
+
   function getDrawArea(){
     $rows = 40;
     $cols = 60;
@@ -115,7 +143,9 @@
   }
   
 	function comment_form() {
-		echo getDrawArea().getColors();
+		if(get_option('draw_do_action') != '-1'){
+      echo getDrawArea().getColors();
+    }
 	}
 	
 	function add_image($comment){
