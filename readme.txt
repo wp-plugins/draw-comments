@@ -1,4 +1,5 @@
 === Draw Comments ===
+Donate link: http://www.azettl.de/donate/
 Tags: draw, comment, image, drawing
 Requires at least: 2.6.2
 Tested up to: 2.6.2
