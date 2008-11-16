@@ -3,7 +3,7 @@ Donate link: http://www.azettl.de/donate/
 Tags: draw, comment, image, drawing
 Requires at least: 2.6.2
 Tested up to: 2.6.2
-Stable tag: 0.0.6
+Stable tag: 0.0.7
 
 This plugin allows your visitors to draw an image as extra comment.
 
