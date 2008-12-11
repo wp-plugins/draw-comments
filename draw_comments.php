@@ -7,7 +7,7 @@
     Author: Andreas Zettl
     Author URI: http://azettl.de/
     Min WP Version: 2.6.2
-    Max WP Version: 2.6.3
+    Max WP Version: 2.7.0
   */
   
   add_action('admin_menu', 'draw_add_menu');
