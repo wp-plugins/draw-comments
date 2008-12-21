@@ -1,7 +1,7 @@
 <?php
   /*
     Plugin Name: Draw Comments
-    Plugin URI: http://www.azettl.de/2008/11/draw-comments/
+    Plugin URI: http://wpdemo.azettl.de/2008/11/draw-comments/
     Description: This plugin allows your visitors to draw an image as extra comment.
     Version: 0.0.7
     Author: Andreas Zettl
