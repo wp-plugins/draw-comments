@@ -3,7 +3,7 @@
     Plugin Name: Draw Comments
     Plugin URI: http://wpdemo.azettl.de/2008/11/draw-comments/
     Description: This plugin allows your visitors to draw an image as extra comment.
-    Version: 0.0.7
+    Version: 0.0.8
     Author: Andreas Zettl
     Author URI: http://azettl.de/
     Min WP Version: 2.6.2
@@ -22,16 +22,30 @@
   
   function draw_option_page() {
     echo '<div class="wrap">
+            <div id="icon-options-general" class="icon32"><br /></div>
             <h2>Draw Comments</h2>
             <form name="form1" method="post" action="'.$location.'">
-              <label for="draw_do_action">Use "do_action(\'comment_form\', $post->ID);" to embed the drawing area:</label><br />
-              <select name="draw_do_action">
-                <option value="1" '.((get_option("draw_do_action") == '1') ? 'selected="selected"' : '').'>Yes</option>
-                <option value="-1" '.((get_option("draw_do_action") == '-1') ? 'selected="selected"' : '').'>No</option>
-              </select>
-              <p>(If "No" selected, you have to use "echo getDrawArea().getColors();" instead of do_action)</p>
-              <br /><br />
-              <input type="submit" value="Save" />
+              <table class="form-table">
+                <tr valign="top">
+                  <th scope="row">Embed Type </th>
+                  <td>
+                    <fieldset>
+                      <legend class="hidden">Embed Type </legend>
+                      <select name="draw_do_action" style="width:60px;">
+                        <option value="1" '.((get_option("draw_do_action") == '1') ? 'selected="selected"' : '').'>Yes</option>
+                        <option value="-1" '.((get_option("draw_do_action") == '-1') ? 'selected="selected"' : '').'>No</option>
+                      </select>
+                      <label for="draw_do_action">
+                        Use '.highlight_string('do_action(\'comment_form\', $post->ID);', true).' to embed the drawing area
+                        (If "No" selected, you have to use '.highlight_string('echo getDrawArea().getColors();', true).' instead of '.highlight_string('do_action', true).').
+                      </label>
+                    </fieldset>
+                  </td>
+                </tr>
+              </table>
+              <p class="submit">
+                <input type="submit" name="Submit" class="button-primary" value="Save Changes" />
+              </p>
               <input name="action" value="insert" type="hidden" />
             </form>
           </div>';
@@ -48,13 +62,13 @@
     
     $ret = '<input type="hidden" id="draw_state" />';
     $ret .= '<input type="hidden" id="draw_color" value="#000000" />';
-    $ret .= '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;" onmousedown="document.getElementById(\'draw_state\').value=1;" onmouseup="document.getElementById(\'draw_state\').value=0;">';
+    $ret .= '<table cellpadding="0" cellspacing="0" style="height:320px;width:480px;border-collapse:collapse;" onmousedown="document.getElementById(\'draw_state\').value=1;" onmouseup="document.getElementById(\'draw_state\').value=0;">';
     for($i = 0; $i < $rows; $i++){
       $ret .= '<tr>';
       for($j = 0; $j < $cols; $j++){
         if(!empty($_POST['cell-'.$i.'-'.$j.''])){
           $ret .= '<td style="width:8px;height:8px;line-height:8px;padding:0px;margin:0px;border:1px solid #808080;" bgcolor="'.$_POST['cell-'.$i.'-'.$j.''].'" onmouseover="if(document.getElementById(\'draw_state\').value == 1){ this.bgColor=document.getElementById(\'draw_color\').value; document.getElementById(\'cell-'.$i.'-'.$j.'\').value = document.getElementById(\'draw_color\').value }">';
-          $ret .= '<input type="hidden" name="cell-'.$i.'-'.$j.'" id="cell-'.$i.'-'.$j.'" value="'.$_POST['cell-'.$i.'-'.$j.''].'"/>';
+          $ret .= '<input type="hidden" name="cell-'.$i.'-'.$j.'" id="cell-'.$i.'-'.$j.'" value="'.$_POST['cell-'.$i.'-'.$j.''].'" />';
           $ret .= '</td>';
         }else{
           $ret .= '<td style="width:8px;height:8px;line-height:8px;padding:0px;margin:0px;border:1px solid #808080;" onmouseover="if(document.getElementById(\'draw_state\').value == 1){ this.bgColor=document.getElementById(\'draw_color\').value; document.getElementById(\'cell-'.$i.'-'.$j.'\').value = document.getElementById(\'draw_color\').value }">';
@@ -65,19 +79,32 @@
       $ret .= '</tr>';
     }
     $ret .= '</table>';
+    $ret .= '<script type="text/javascript">
+        function clearDrawArea(){
+          var rows = 40;
+          var cols = 60;
+          
+          for(var i = 0; i < rows; i++){
+            for(var j = 0; j < cols; j++){
+              document.getElementById("cell-" + i + "-" + j).value = "";
+            }
+          }
+        }
+        clearDrawArea();
+      </script>';
     return $ret;
   }
   
   function getColors(){
-    $ret = '<table cellpadding="4" cellspacing="4">';
+    $ret = '<table cellpadding="4" cellspacing="4" style="height:12px;line-height:12px;font-size:12px;">';
     $ret .= '<tr>';
     $ret .= '<td>Choose Color: </td>';
-    $ret .= '<td style="height:20px;width:20px;background-color:#FF0000;border:2px solid #808080;" onclick="document.getElementById(\'draw_color\').value=\'#FF0000\';">&nbsp;</td>';
-    $ret .= '<td style="height:20px;width:20px;background-color:#0000FF;border:2px solid #808080;" onclick="document.getElementById(\'draw_color\').value=\'#0000FF\';">&nbsp;</td>';
-    $ret .= '<td style="height:20px;width:20px;background-color:#FFFF00;border:2px solid #808080;" onclick="document.getElementById(\'draw_color\').value=\'#FFFF00\';">&nbsp;</td>';
-    $ret .= '<td style="height:20px;width:20px;background-color:#00FF00;border:2px solid #808080;" onclick="document.getElementById(\'draw_color\').value=\'#00FF00\';">&nbsp;</td>';
-    $ret .= '<td style="height:20px;width:20px;background-color:#000000;border:2px solid #808080;" onclick="document.getElementById(\'draw_color\').value=\'#000000\';">&nbsp;</td>';
-    $ret .= '<td style="height:20px;width:20px;background-color:#FFFFFF;border:2px solid #808080;" onclick="document.getElementById(\'draw_color\').value=\'#FFFFFF\';">&nbsp;</td>';
+    $ret .= '<td style="width:12px;background-color:#FF0000;border:2px solid #808080;" onclick="document.getElementById(\'draw_color\').value=\'#FF0000\';">&nbsp;</td>';
+    $ret .= '<td style="width:12px;background-color:#0000FF;border:2px solid #808080;" onclick="document.getElementById(\'draw_color\').value=\'#0000FF\';">&nbsp;</td>';
+    $ret .= '<td style="width:12px;background-color:#FFFF00;border:2px solid #808080;" onclick="document.getElementById(\'draw_color\').value=\'#FFFF00\';">&nbsp;</td>';
+    $ret .= '<td style="width:12px;background-color:#00FF00;border:2px solid #808080;" onclick="document.getElementById(\'draw_color\').value=\'#00FF00\';">&nbsp;</td>';
+    $ret .= '<td style="width:12px;background-color:#000000;border:2px solid #808080;" onclick="document.getElementById(\'draw_color\').value=\'#000000\';">&nbsp;</td>';
+    $ret .= '<td style="width:12px;background-color:#FFFFFF;border:2px solid #808080;" onclick="document.getElementById(\'draw_color\').value=\'#FFFFFF\';">&nbsp;</td>';
     $ret .= '</tr>';
     $ret .= '</table>';
     return $ret;
