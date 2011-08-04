@@ -1,17 +1,16 @@
 <?php
   /*
     Plugin Name: Draw Comments
-    Plugin URI: http://wpdemo.azettl.de/2008/11/draw-comments/
     Description: This plugin allows your visitors to draw an image as extra comment.
-    Version: 0.0.9
+    Version: 0.1.0
     Author: Andreas Zettl
     Author URI: http://azettl.de/
     Min WP Version: 2.6.2
-    Max WP Version: 2.7.0
+    Max WP Version: 3.2.1
   */
   
   add_action('admin_menu', 'draw_add_menu');
-	add_action('comment_form', 'comment_form');
+  add_action('comment_form_field_comment', 'comment_form_field_comment');
   add_action('preprocess_comment', 'add_image',1);
   add_filter('comment_text', 'replace_image');
   add_filter('comment_excerpt', 'replace_image');
@@ -171,7 +170,8 @@
     return $image;
   }
   
-	function comment_form() {
+	function comment_form_field_comment($field) {
+		echo $field;
 		if(get_option('draw_do_action') != '-1'){
       echo getDrawArea().getColors();
     }
